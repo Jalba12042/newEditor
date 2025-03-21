@@ -2,13 +2,19 @@ using UnityEngine;
 
 public class ShepherdsCrook : MonoBehaviour
 {
-    [SerializeField] private float pushForce = 10f; // Adjustable in Inspector
-    [SerializeField] private float maxDistance = 5f; // Max range of the crook
-    [SerializeField] private LayerMask playerLayer; // Set this to detect only players
+    public float pushForce = 10f; // Adjustable force from the Inspector
+    public float maxRange = 5f; // Max range for the push effect
+
+    private Camera playerCamera;
+
+    void Start()
+    {
+        playerCamera = Camera.main; // Assign the main camera as the player's camera
+    }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Left click
+        if (Input.GetMouseButtonDown(0)) // Left-click to push
         {
             TryPushPlayer();
         }
@@ -16,14 +22,23 @@ public class ShepherdsCrook : MonoBehaviour
 
     void TryPushPlayer()
     {
+        if (playerCamera == null) return; // Safety check
+
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, playerLayer))
+        Vector3 rayOrigin = playerCamera.transform.position; // Start the ray from the camera
+        Vector3 rayDirection = playerCamera.transform.forward; // Shoot forward
+
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, maxRange))
         {
-            Rigidbody targetRb = hit.collider.GetComponent<Rigidbody>();
-            if (targetRb != null)
+            if (hit.collider.CompareTag("Player")) // Ensure we're hitting another player
             {
-                Vector3 pushDirection = (hit.transform.position - transform.position).normalized;
-                targetRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
+                Rigidbody targetRb = hit.collider.GetComponent<Rigidbody>();
+                if (targetRb != null)
+                {
+                    Debug.Log("RayHit");
+                    Vector3 pushDirection = rayDirection.normalized; // Push in the camera's forward direction
+                    targetRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
+                }
             }
         }
     }
