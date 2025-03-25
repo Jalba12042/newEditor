@@ -2,18 +2,17 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    public Transform handTransform; // The transform where the item will be held
-    private GameObject heldItem;
-    private Rigidbody heldItemRb;
+    public Transform hand; // The player's hand object
+    private GameObject currentItem;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // Pick up with "E"
+        if (Input.GetKeyDown(KeyCode.E)) // Press E to pick up an item
         {
             TryPickupItem();
         }
 
-        if (Input.GetMouseButtonDown(1)) // Drop with right-click
+        if (Input.GetMouseButtonDown(1)) // Right Click to drop
         {
             DropItem();
         }
@@ -21,41 +20,72 @@ public class ItemPickup : MonoBehaviour
 
     void TryPickupItem()
     {
-        if (heldItem != null) return; // Prevent picking up multiple items
-
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 8f))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // Ray from screen center
+
+        // Draw the ray in the scene view for debugging (green for clear, red if it hits)
+        Debug.DrawRay(ray.origin, ray.direction * 3f, Color.green, 0.5f);
+
+        if (Physics.Raycast(ray, out hit, 3f))
         {
-            if (hit.collider.CompareTag("Item"))
+            Debug.Log($"Raycast hit: {hit.collider.name}", hit.collider.gameObject);
+            Debug.DrawRay(ray.origin, ray.direction * 3f, Color.red, 0.5f); // Change to red when hitting something
+
+            GameObject item = hit.collider.gameObject;
+            if (item.CompareTag("Item"))
             {
-                heldItem = hit.collider.gameObject;
-                heldItemRb = heldItem.GetComponent<Rigidbody>();
-
-                if (heldItemRb)
-                {
-                    heldItemRb.isKinematic = true; // Disable physics while holding
-                }
-
-                heldItem.transform.SetParent(handTransform);
-                heldItem.transform.localPosition = Vector3.zero; // Adjust position in hand
-                heldItem.transform.localRotation = Quaternion.identity;
+                PickupItem(item);
             }
         }
     }
 
-    void DropItem()
+
+    void PickupItem(GameObject item)
     {
-        if (heldItem == null) return;
+        if (currentItem != null) return; // Prevent picking up multiple items
 
-        heldItem.transform.SetParent(null);
-
-        if (heldItemRb)
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            heldItemRb.isKinematic = false; // Reactivate physics
-            heldItemRb.AddForce(Camera.main.transform.forward * 2f, ForceMode.Impulse); // Add a small throw force
+            rb.isKinematic = true; // Disable physics so it stays in place
         }
 
-        heldItem = null;
-        heldItemRb = null;
+        Transform attachPoint = item.transform.Find("AttachPoint");
+
+        if (attachPoint != null)
+        {
+            Debug.Log($"AttachPoint found on {item.name}: {attachPoint.position}");
+
+            item.transform.SetParent(hand);
+            item.transform.localPosition = -attachPoint.localPosition; // Invert AttachPoint position
+            item.transform.localRotation = Quaternion.Inverse(attachPoint.localRotation); // Invert rotation
+        }
+        else
+        {
+            Debug.LogWarning($"No AttachPoint found on {item.name}, attaching directly to hand!");
+            item.transform.SetParent(hand);
+            item.transform.localPosition = Vector3.zero;
+            item.transform.localRotation = Quaternion.identity;
+        }
+
+        currentItem = item;
+    }
+
+    void DropItem()
+    {
+        if (currentItem == null) return; // No item to drop
+
+        Debug.Log($"Dropping: {currentItem.name}");
+
+        currentItem.transform.SetParent(null); // Unparent from hand
+
+        Rigidbody rb = currentItem.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false; // Enable physics again
+            rb.AddForce(transform.forward * 2f, ForceMode.Impulse); // Optional: Small push forward
+        }
+
+        currentItem = null;
     }
 }
