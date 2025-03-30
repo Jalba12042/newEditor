@@ -5,6 +5,9 @@ public class ZeusBoltItem : MonoBehaviour
     public GameObject slowZonePrefab; // The slow area effect
     public float slowDuration = 5f;
 
+    [Header("Idle Sound While Held")]
+    public AudioClip idleSound; // The sound that plays while this item is being held
+
     void OnCollisionEnter(Collision collision)
     {
         // Check if we hit the ground or a valid surface
@@ -21,3 +24,4 @@ public class ZeusBoltItem : MonoBehaviour
         }
     }
 }
+
