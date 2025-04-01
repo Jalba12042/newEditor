@@ -2,21 +2,66 @@ using UnityEngine;
 
 public class ZeusBoltItem : MonoBehaviour
 {
-    public GameObject slowZonePrefab; // The slow area effect
-    public float slowDuration = 5f;
+    public float throwForce = 15f;
+    public GameObject slowZonePrefab; // Assign the Slow Zone prefab in the Inspector
+    public float slowZoneDuration = 5f;
 
-    void OnCollisionEnter(Collision collision)
+    private Rigidbody rb;
+    private bool isHeld = false;
+
+    void Start()
     {
-        // Check if we hit the ground or a valid surface
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Default"))
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true; // Disable physics while held
+    }
+
+    void Update()
+    {
+        if (isHeld && Input.GetMouseButtonDown(0)) // Left-click to throw
         {
-            // Spawn the slow zone at the impact point
-            GameObject slowZone = Instantiate(slowZonePrefab, transform.position, Quaternion.identity);
+            Throw();
+        }
+    }
 
-            // Start the countdown to destroy it
-            Destroy(slowZone, slowDuration);
+    public void PickUp(Transform hand)
+    {
+        isHeld = true;
+        transform.SetParent(hand);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        rb.isKinematic = true;
+        Debug.Log("isHeld");
 
-            // Destroy the bolt itself
+    }
+
+    public void Drop()
+    {
+        isHeld = false;
+        transform.SetParent(null);
+        rb.isKinematic = false;
+    }
+
+    private void Throw()
+    {
+        isHeld = false;
+        transform.SetParent(null);
+        rb.isKinematic = false;
+
+        Vector3 throwDirection = Camera.main.transform.forward;
+        rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+        Debug.Log("Lightning Bolt thrown!");
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!isHeld && collision.gameObject.CompareTag("Ground")) // If thrown and hits ground
+        {
+            Debug.Log("Lightning Bolt landed!");
+
+            // Spawn Slow Zone
+            Instantiate(slowZonePrefab, transform.position, Quaternion.identity);
+
+            // Destroy the bolt after impact
             Destroy(gameObject);
         }
     }

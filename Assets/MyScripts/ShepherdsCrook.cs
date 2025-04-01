@@ -14,7 +14,7 @@ public class ShepherdsCrook : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Left-click to push
+        if ((item.transform.parent == hand) && Input.GetMouseButtonDown(0)) // Left-click to push
         {
             TryPushPlayer();
         }
