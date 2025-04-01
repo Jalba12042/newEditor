@@ -9,11 +9,10 @@ public class ZeusBoltItem : MonoBehaviour
     private Rigidbody rb;
     private bool isHeld = false;
 
-    void Start()
     [Header("Idle Sound While Held")]
-    public AudioClip idleSound; // The sound that plays while this item is being held
+    public AudioClip idleSound;
 
-    void OnCollisionEnter(Collision collision)
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true; // Disable physics while held
@@ -34,8 +33,6 @@ public class ZeusBoltItem : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         rb.isKinematic = true;
-        Debug.Log("isHeld");
-
     }
 
     public void Drop()
@@ -70,4 +67,3 @@ public class ZeusBoltItem : MonoBehaviour
         }
     }
 }
-

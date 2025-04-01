@@ -14,7 +14,7 @@ public class ShepherdsCrook : MonoBehaviour
 
     void Update()
     {
-        if ((item.transform.parent == hand) && Input.GetMouseButtonDown(0)) // Left-click to push
+        if (Input.GetMouseButtonDown(0)) // Left-click to push
         {
             TryPushPlayer();
         }
@@ -35,7 +35,6 @@ public class ShepherdsCrook : MonoBehaviour
                 Rigidbody targetRb = hit.collider.GetComponent<Rigidbody>();
                 if (targetRb != null)
                 {
-                    Debug.Log("RayHit");
                     Vector3 pushDirection = rayDirection.normalized; // Push in the camera's forward direction
                     targetRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
                 }
