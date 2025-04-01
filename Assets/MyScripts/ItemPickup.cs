@@ -5,6 +5,16 @@ public class ItemPickup : MonoBehaviour
     public Transform hand; // The player's hand object
     private GameObject currentItem;
 
+    private AudioSource idleAudioSource;
+
+    void Start()
+    {
+        // Create a new audio source just for idle sounds
+        idleAudioSource = gameObject.AddComponent<AudioSource>();
+        idleAudioSource.loop = true;
+        idleAudioSource.playOnAwake = false;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E)) // Press E to pick up an item
@@ -31,6 +41,7 @@ public class ItemPickup : MonoBehaviour
             Debug.DrawRay(ray.origin, ray.direction * 5f, Color.red, 1f);
 
             GameObject item = hit.collider.gameObject;
+
             if (item.CompareTag("Item"))
             {
                 PickupItem(item);
@@ -64,6 +75,14 @@ public class ItemPickup : MonoBehaviour
         }
 
         currentItem = item;
+
+        // Check for ZeusBoltItem component
+        ZeusBoltItem bolt = currentItem.GetComponent<ZeusBoltItem>();
+        if (bolt != null && bolt.idleSound != null)
+        {
+            idleAudioSource.clip = bolt.idleSound;
+            idleAudioSource.Play();
+        }
     }
 
     void DropItem()
@@ -80,6 +99,9 @@ public class ItemPickup : MonoBehaviour
             rb.isKinematic = false;
             rb.AddForce(transform.forward * 2f, ForceMode.Impulse);
         }
+
+        // Stop idle sound
+        idleAudioSource.Stop();
 
         currentItem = null;
     }

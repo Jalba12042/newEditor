@@ -10,6 +10,10 @@ public class ZeusBoltItem : MonoBehaviour
     private bool isHeld = false;
 
     void Start()
+    [Header("Idle Sound While Held")]
+    public AudioClip idleSound; // The sound that plays while this item is being held
+
+    void OnCollisionEnter(Collision collision)
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true; // Disable physics while held
@@ -66,3 +70,4 @@ public class ZeusBoltItem : MonoBehaviour
         }
     }
 }
+
