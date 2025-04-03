@@ -22,6 +22,9 @@ public class ZeusBoltItem : MonoBehaviour
     {
         if (isHeld && Input.GetMouseButtonDown(0)) // Left-click to throw
         {
+            isHeld = false;
+            transform.SetParent(null);
+            rb.isKinematic = false;
             Throw();
         }
     }
@@ -44,10 +47,6 @@ public class ZeusBoltItem : MonoBehaviour
 
     private void Throw()
     {
-        isHeld = false;
-        transform.SetParent(null);
-        rb.isKinematic = false;
-
         Vector3 throwDirection = Camera.main.transform.forward;
         rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
         Debug.Log("Lightning Bolt thrown!");
@@ -55,15 +54,17 @@ public class ZeusBoltItem : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!isHeld && collision.gameObject.CompareTag("Ground")) // If thrown and hits ground
+        if (isHeld = false && collision.gameObject.CompareTag("Ground") && slowZonePrefab != null) // If thrown and hits ground
         {
             Debug.Log("Lightning Bolt landed!");
-
-            // Spawn Slow Zone
-            Instantiate(slowZonePrefab, transform.position, Quaternion.identity);
+            
+            {
+                Instantiate(slowZonePrefab, transform.position, Quaternion.identity);
+            }
+            Debug.Break(); // Pause the game for inspection
 
             // Destroy the bolt after impact
-            Destroy(gameObject);
+           // Destroy(gameObject);
         }
     }
 }

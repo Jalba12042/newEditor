@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2888038589317815179}
   - component: {fileID: 3186856052633666543}
   m_Layer: 0
-  m_Name: AOE field
+  m_Name: slowZonePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
