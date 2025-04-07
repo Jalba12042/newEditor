@@ -372,9 +372,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: b591cc8284504af4d87a44fefb0cee8f, type: 3}
     - target: {fileID: 4380415942452415119, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
+      propertyPath: sprintClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 1565bfd34ca72e64a8dbce20c639a050, type: 3}
+    - target: {fileID: 4380415942452415119, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
       propertyPath: footstepClip
       value: 
       objectReference: {fileID: 8300000, guid: fa5117d5676830e488c097aacc5d8438, type: 3}
+    - target: {fileID: 4380415942452415119, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
+      propertyPath: sprintGlowUI
+      value: 
+      objectReference: {fileID: 1573229427}
     - target: {fileID: 4380415942452415119, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
       propertyPath: jumpAudioSource
       value: 
@@ -8553,6 +8561,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8c6f00f4ff6cb645bd33ee88b543454, type: 3}
   m_PrefabInstance: {fileID: 1405197361}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1317755693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1317755695}
+  - component: {fileID: 1317755694}
+  m_Layer: 0
+  m_Name: SprintManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1317755694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317755693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7a3e321ea25e841809e60a79a4cf2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprintDuration: 3
+  sprintCooldown: 5
+  sprintUIImage: {fileID: 1573229430}
+  glowEffect: {fileID: 1573229427}
+--- !u!4 &1317755695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317755693}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.672241, y: -309.39438, z: -260.02808}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1596739671}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1332062424
 GameObject:
   m_ObjectHideFlags: 0
@@ -10395,6 +10451,97 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572663629}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1573229426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1573229429}
+  - component: {fileID: 1573229428}
+  - component: {fileID: 1573229430}
+  - component: {fileID: 1573229427}
+  m_Layer: 5
+  m_Name: SprintButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1573229427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573229426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 0, a: 0.5}
+  m_EffectDistance: {x: -0.8, y: 3.34}
+  m_UseGraphicAlpha: 1
+--- !u!222 &1573229428
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573229426}
+  m_CullTransparentMesh: 1
+--- !u!224 &1573229429
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573229426}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.6304, y: 3.6304, z: 3.6304}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1596739671}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -4.4, y: -297.3}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1573229430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573229426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b7e7703ab451b194bbed106eadf99555, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1596739667
 GameObject:
   m_ObjectHideFlags: 0
@@ -10490,6 +10637,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1879629945}
+  - {fileID: 1573229429}
+  - {fileID: 1317755695}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -12499,7 +12648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -807, y: 368.906}
+  m_AnchoredPosition: {x: -673, y: 210}
   m_SizeDelta: {x: 185.4984, y: 145.2257}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1879629946
@@ -14545,3 +14694,4 @@ SceneRoots:
   - {fileID: 505262776}
   - {fileID: 1820006041}
   - {fileID: 106238792}
+  - {fileID: 1352321504141254898}
