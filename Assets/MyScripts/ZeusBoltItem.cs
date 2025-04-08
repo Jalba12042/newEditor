@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InteractableItem : MonoBehaviour
+public class ZeusBoltItem : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider col;

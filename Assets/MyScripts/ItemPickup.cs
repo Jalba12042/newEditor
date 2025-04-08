@@ -18,27 +18,64 @@ public class ItemPickup : MonoBehaviour
                 DropItem();
         }
 
-        if (heldItem != null && Input.GetMouseButtonDown(0)) // Left click
+        if (heldItem != null && Input.GetMouseButtonDown(0))
         {
-            ThrowItem();
+            var crook = heldItem.GetComponent<ShepherdsCrook>();
+            if (crook != null)
+            {
+                crook.Use();
+            }
+            else
+            {
+                var arcItem = heldItem.GetComponent<JugBHVR>();
+                if (arcItem != null)
+                {
+                    arcItem.Throw(Camera.main.transform);
+                    heldItem = null;
+                }
+                else
+                {
+                    var item = heldItem.GetComponent<ZeusBoltItem>();
+                    if (item != null)
+                    {
+                        item.Throw(Camera.main.transform.forward);
+                        heldItem = null;
+                    }
+                }
+            }
         }
+
     }
 
     void TryPickupItem()
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-        RaycastHit hit;
         Debug.DrawRay(ray.origin, ray.direction * pickupRange, Color.green, 1f);
 
-        if (Physics.Raycast(ray, out hit, pickupRange, interactableLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, pickupRange, interactableLayer))
         {
             Debug.Log($"Hit item: {hit.collider.name}");
 
-            InteractableItem item = hit.collider.GetComponent<InteractableItem>();
-            if (item != null)
+            GameObject target = hit.collider.gameObject;
+
+            if (target.TryGetComponent(out ZeusBoltItem item))
             {
-                heldItem = hit.collider.gameObject;
+                heldItem = target;
                 item.Pickup(handTransform);
+            }
+            else if (target.TryGetComponent(out ShepherdsCrook crook))
+            {
+                heldItem = target;
+                crook.Pickup(handTransform);
+            }
+            else if (target.TryGetComponent(out JugBHVR arcItem))
+            {
+                heldItem = target;
+                arcItem.Pickup(handTransform);
+            }
+            else
+            {
+                Debug.Log("Hit something interactable-layered but it has no pickup logic.");
             }
         }
         else
@@ -47,21 +84,26 @@ public class ItemPickup : MonoBehaviour
         }
     }
 
+
     void DropItem()
     {
-        if (heldItem != null)
+        if (heldItem == null) return;
+
+        if (heldItem.TryGetComponent(out ZeusBoltItem item))
         {
-            heldItem.GetComponent<InteractableItem>().Drop();
-            heldItem = null;
+            item.Drop();
         }
+        else if (heldItem.TryGetComponent(out ShepherdsCrook crook))
+        {
+            crook.Drop();
+        }
+        else if (heldItem.TryGetComponent(out JugBHVR arcItem))
+        {
+            arcItem.Drop();
+        }
+
+        Debug.Log($"Dropped: {heldItem.name}");
+        heldItem = null;
     }
 
-    void ThrowItem()
-    {
-        if (heldItem != null)
-        {
-            heldItem.GetComponent<InteractableItem>().Throw(transform.forward);
-            heldItem = null;
-        }
-    }
 }
