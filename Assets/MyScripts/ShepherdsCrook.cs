@@ -2,17 +2,19 @@ using UnityEngine;
 
 public class ShepherdsCrook : MonoBehaviour
 {
-    public float pushForce = 10f;
-    public float pushRange = 2.5f;
+    private Rigidbody rb;
+    private Collider col;
+
+    public Transform playerCamera;
     public LayerMask pushableLayer;
 
-    private Rigidbody rb;
-    private Transform playerCamera;
+    public float pushRange;
+    public float pushForce;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerCamera = Camera.main.transform;
+        col = GetComponent<Collider>();
     }
 
     public void Pickup(Transform hand)
