@@ -2,42 +2,45 @@ using UnityEngine;
 
 public class ShepherdsCrook : MonoBehaviour
 {
-    public float pushForce = 10f; // Adjustable force from the Inspector
-    public float maxRange = 5f; // Max range for the push effect
+    public float pushForce = 10f;
+    public float pushRange = 2.5f;
+    public LayerMask pushableLayer;
 
-    private Camera playerCamera;
+    private Rigidbody rb;
+    private Transform playerCamera;
 
-    void Start()
+    void Awake()
     {
-        playerCamera = Camera.main; // Assign the main camera as the player's camera
+        rb = GetComponent<Rigidbody>();
+        playerCamera = Camera.main.transform;
     }
 
-    void Update()
+    public void Pickup(Transform hand)
     {
-        if (Input.GetMouseButtonDown(0)) // Left-click to push
-        {
-            TryPushPlayer();
-        }
+        rb.isKinematic = true;
+        transform.SetParent(hand);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
     }
 
-    void TryPushPlayer()
+    public void Drop()
     {
-        if (playerCamera == null) return; // Safety check
+        transform.SetParent(null);
+        rb.isKinematic = false;
+    }
 
-        RaycastHit hit;
-        Vector3 rayOrigin = playerCamera.transform.position; // Start the ray from the camera
-        Vector3 rayDirection = playerCamera.transform.forward; // Shoot forward
-
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, maxRange))
+    public void Use()
+    {
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, pushRange, pushableLayer))
         {
-            if (hit.collider.CompareTag("Player")) // Ensure we're hitting another player
+            Rigidbody hitRb = hit.collider.attachedRigidbody;
+            if (hitRb != null)
             {
-                Rigidbody targetRb = hit.collider.GetComponent<Rigidbody>();
-                if (targetRb != null)
-                {
-                    Vector3 pushDirection = rayDirection.normalized; // Push in the camera's forward direction
-                    targetRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
-                }
+                Vector3 pushDir = hit.point - transform.position;
+                pushDir.y = 0f; // Optional: keep the push mostly horizontal
+                pushDir.Normalize();
+                hitRb.AddForce(pushDir * pushForce, ForceMode.Impulse);
             }
         }
     }

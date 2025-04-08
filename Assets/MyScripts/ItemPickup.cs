@@ -2,112 +2,66 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    public Transform hand; // The player's hand object
-    private GameObject currentItem;
+    public float pickupRange = 3f;
+    public LayerMask interactableLayer;
+    public Transform handTransform;
 
-    private AudioSource idleAudioSource;
-
-    void Start()
-    {
-        // Create a new audio source just for idle sounds
-        idleAudioSource = gameObject.AddComponent<AudioSource>();
-        idleAudioSource.loop = true;
-        idleAudioSource.playOnAwake = false;
-    }
+    private GameObject heldItem;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // Press E to pick up an item
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            TryPickupItem();
+            if (heldItem == null)
+                TryPickupItem();
+            else
+                DropItem();
         }
 
-        if (Input.GetMouseButtonDown(1)) // Right Click to drop
+        if (heldItem != null && Input.GetMouseButtonDown(0)) // Left click
         {
-            DropItem();
+            ThrowItem();
         }
     }
 
     void TryPickupItem()
     {
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * pickupRange, Color.green, 1f);
 
-        Debug.DrawRay(ray.origin, ray.direction * 10f, Color.green, 1f);
-
-        if (Physics.Raycast(ray, out hit, 3f))
+        if (Physics.Raycast(ray, out hit, pickupRange, interactableLayer))
         {
-            Debug.Log($"Raycast hit: {hit.collider.name}", hit.collider.gameObject);
-            Debug.DrawRay(ray.origin, ray.direction * 5f, Color.red, 1f);
+            Debug.Log($"Hit item: {hit.collider.name}");
 
-            GameObject item = hit.collider.gameObject;
-
-            if (item.CompareTag("Item"))
+            InteractableItem item = hit.collider.GetComponent<InteractableItem>();
+            if (item != null)
             {
-                PickupItem(item);
+                heldItem = hit.collider.gameObject;
+                item.Pickup(handTransform);
             }
-        }
-    }
-
-    void PickupItem(GameObject item)
-    {
-        if (currentItem != null) return;
-
-        Rigidbody rb = item.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-        }
-
-        Transform attachPoint = item.transform.Find("AttachPoint");
-
-        if (attachPoint != null)
-        {
-            item.transform.SetParent(hand);
-            item.transform.localPosition = -attachPoint.localPosition;
-            item.transform.localRotation = Quaternion.Inverse(attachPoint.localRotation);
         }
         else
         {
-            item.transform.SetParent(hand);
-            item.transform.localPosition = Vector3.zero;
-            item.transform.localRotation = Quaternion.identity;
-        }
-
-        currentItem = item;
-
-        // Check for ZeusBoltItem component
-        ZeusBoltItem bolt = currentItem.GetComponent<ZeusBoltItem>();
-        if (bolt != null && bolt.idleSound != null)
-        {
-            idleAudioSource.clip = bolt.idleSound;
-            idleAudioSource.Play();
+            Debug.Log("No interactable item hit.");
         }
     }
 
     void DropItem()
     {
-        if (currentItem == null) return;
-
-        Debug.Log($"Dropping: {currentItem.name}");
-
-        currentItem.transform.SetParent(null);
-
-        Rigidbody rb = currentItem.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (heldItem != null)
         {
-            rb.isKinematic = false;
-            rb.AddForce(transform.forward * 2f, ForceMode.Impulse);
+            heldItem.GetComponent<InteractableItem>().Drop();
+            heldItem = null;
         }
-
-        // Stop idle sound
-        idleAudioSource.Stop();
-
-        currentItem = null;
     }
 
-    public GameObject GetCurrentItem()
+    void ThrowItem()
     {
-        return currentItem;
+        if (heldItem != null)
+        {
+            heldItem.GetComponent<InteractableItem>().Throw(transform.forward);
+            heldItem = null;
+        }
     }
 }

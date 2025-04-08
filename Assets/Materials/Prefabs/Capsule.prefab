@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4380415942452415119}
   - component: {fileID: -1729070867380818558}
   - component: {fileID: 7973195513815875169}
-  - component: {fileID: 256118083864978507}
+  - component: {fileID: -4981335689214677994}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -166,6 +166,10 @@ MonoBehaviour:
   footstepClip: {fileID: 0}
   jumpClip: {fileID: 0}
   landClip: {fileID: 0}
+  sprintClip: {fileID: 0}
+  sprintDuration: 6
+  sprintCooldown: 5
+  sprintGlowUI: {fileID: 0}
 --- !u!114 &-1729070867380818558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +292,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &256118083864978507
+--- !u!114 &-4981335689214677994
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,14 +301,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 307304781368375078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bc30b0f0238ef242a31dac57b477625, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c727e83a4921744e9bb17a1369ee184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 10
-  hitLayers:
+  pickupRange: 3
+  interactableLayer:
     serializedVersion: 2
     m_Bits: 64
-  debugRayColor: {r: 1, g: 0, b: 0, a: 1}
+  handTransform: {fileID: 0}
 --- !u!1 &5701065950713193721
 GameObject:
   m_ObjectHideFlags: 0

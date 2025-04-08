@@ -1,42 +1,33 @@
 using UnityEngine;
 
-public class ZeusBoltItem : MonoBehaviour
+public class InteractableItem : MonoBehaviour
 {
-    private Transform originalParent;
     private Rigidbody rb;
-    private bool isHeld = false;
+    private Collider col;
 
-    public float throwForce = 10f; // Adjust for desired throw strength
-
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        originalParent = transform.parent;
+        col = GetComponent<Collider>();
     }
 
-    void Update()
+    public void Pickup(Transform hand)
     {
-        if (isHeld && Input.GetKeyDown(KeyCode.E))
-        {
-            ThrowSpear();
-        }
-    }
-
-    public void AttachToHand(Transform hand)
-    {
-        isHeld = true;
+        rb.isKinematic = true;
         transform.SetParent(hand);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-
-        rb.isKinematic = true; // Stop physics while holding
     }
 
-    void ThrowSpear()
+    public void Drop()
     {
-        isHeld = false;
         transform.SetParent(null);
         rb.isKinematic = false;
-        rb.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+    }
+
+    public void Throw(Vector3 direction)
+    {
+        Drop();
+        rb.AddForce(direction * 40f, ForceMode.VelocityChange); // Adjust throw force as needed
     }
 }
