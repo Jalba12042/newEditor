@@ -32,6 +32,10 @@ public class ItemPickup : MonoBehaviour
                 {
                     arcItem.Throw(Camera.main.transform);
                     heldItem = null;
+
+                    // Reset UI
+                    var ui = FindFirstObjectByType<EquipmentUIController>();
+                    if (ui != null) ui.SetEquipmentIcon("Default");
                 }
                 else
                 {
@@ -40,11 +44,14 @@ public class ItemPickup : MonoBehaviour
                     {
                         item.Throw(Camera.main.transform.forward);
                         heldItem = null;
+
+                        // Reset UI
+                        var ui = FindFirstObjectByType<EquipmentUIController>();
+                        if (ui != null) ui.SetEquipmentIcon("Default");
                     }
                 }
             }
         }
-
     }
 
     void TryPickupItem()
@@ -57,21 +64,31 @@ public class ItemPickup : MonoBehaviour
             Debug.Log($"Hit item: {hit.collider.name}");
 
             GameObject target = hit.collider.gameObject;
+            EquipmentUIController ui = FindFirstObjectByType<EquipmentUIController>();
 
             if (target.TryGetComponent(out ZeusBoltItem item))
             {
                 heldItem = target;
                 item.Pickup(handTransform);
+
+                if (ui != null)
+                    ui.SetEquipmentIcon("Lightning");
             }
             else if (target.TryGetComponent(out ShepherdsCrook crook))
             {
                 heldItem = target;
                 crook.Pickup(handTransform);
+
+                if (ui != null)
+                    ui.SetEquipmentIcon("Crook");
             }
             else if (target.TryGetComponent(out JugBHVR arcItem))
             {
                 heldItem = target;
                 arcItem.Pickup(handTransform);
+
+                if (ui != null)
+                    ui.SetEquipmentIcon("Jug");
             }
             else
             {
@@ -83,7 +100,6 @@ public class ItemPickup : MonoBehaviour
             Debug.Log("No interactable item hit.");
         }
     }
-
 
     void DropItem()
     {
@@ -102,8 +118,12 @@ public class ItemPickup : MonoBehaviour
             arcItem.Drop();
         }
 
+        // Reset UI when dropping
+        var ui = FindFirstObjectByType<EquipmentUIController>();
+        if (ui != null)
+            ui.SetEquipmentIcon("Default");
+
         Debug.Log($"Dropped: {heldItem.name}");
         heldItem = null;
     }
-
 }

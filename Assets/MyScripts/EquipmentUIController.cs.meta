@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1134a1274ec09f84096666064b33dcbb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - equipmentIcon: {instanceID: 0}
+  - defaultIcon: {fileID: 21300000, guid: 3d7bbfa7189303a4dbb8676780cc5b79, type: 3}
+  - crookIcon: {fileID: 21300000, guid: 2393c9f7155ac8f4fabda0645235dbdb, type: 3}
+  - jugIcon: {fileID: 21300000, guid: d46c483a7716a5b49b9a35e7632d9343, type: 3}
+  - boltIcon: {fileID: 21300000, guid: 0b870f48b39e51b41bc548cae8cecd56, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

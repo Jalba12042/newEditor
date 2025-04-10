@@ -810,7 +810,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"3d7bbfa7189303a4dbb8676780cc5b79\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"d46c483a7716a5b49b9a35e7632d9343\",\"type\":3}}",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -1235,7 +1235,7 @@
     "m_ObjectId": "64f122b7a49e40d5905588fd75549e43",
     "m_Title": "CycleTime",
     "m_Position": {
-        "x": -1641.5999755859375,
+        "x": -1641.60009765625,
         "y": 600.800048828125
     }
 }
@@ -2364,8 +2364,8 @@
     "m_ObjectId": "f159c9a61d87477f84f6d079cc0975ff",
     "m_Title": "Rotation",
     "m_Position": {
-        "x": -1717.5999755859375,
-        "y": 61.599979400634769
+        "x": -1717.60009765625,
+        "y": 61.60003662109375
     }
 }
 
