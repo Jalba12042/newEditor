@@ -500,6 +500,10 @@ PrefabInstance:
       value: Capsule
       objectReference: {fileID: 0}
     - target: {fileID: 307304781368375078, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 307304781368375078, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}

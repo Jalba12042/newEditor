@@ -64,8 +64,8 @@ public class SC_FPSController : MonoBehaviour
         sprintAudioSource.loop = false; // Set to true if you're using a looped sprint sound
 
         // Lock cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         wasGrounded = characterController.isGrounded;
 
@@ -74,6 +74,12 @@ public class SC_FPSController : MonoBehaviour
             sprintGlowUI.enabled = true;
     }
 
+    private void OnLevelWasLoaded(int level)
+    {
+        // Lock cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
     void Update()
     {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
