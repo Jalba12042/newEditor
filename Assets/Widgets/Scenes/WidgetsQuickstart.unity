@@ -2860,7 +2860,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 828873436}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 307304781368375078, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 202769b9499d3d1488d54e1acc2b8c1d, type: 2}
@@ -3972,7 +3972,19 @@ MonoBehaviour:
   sceneName: MainScene
   OnSceneSwitched:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1373401676
 MonoBehaviour:
   m_ObjectHideFlags: 0

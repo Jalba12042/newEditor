@@ -480,6 +480,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4981335689214677994, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4981335689214677994, guid: 17aaf39dabea6234f83352a8fe95cd9f, type: 3}
       propertyPath: pickupRange
       value: 8
       objectReference: {fileID: 0}
