@@ -7,6 +7,14 @@ public class ItemPickup : MonoBehaviour
     public Transform handTransform;
 
     private GameObject heldItem;
+    private EquipmentUIController uiController;
+
+    void Start()
+    {
+        uiController = Object.FindFirstObjectByType<EquipmentUIController>();
+        if (uiController == null)
+            Debug.LogError("EquipmentUIController not found in scene!");
+    }
 
     void Update()
     {
@@ -20,31 +28,23 @@ public class ItemPickup : MonoBehaviour
 
         if (heldItem != null && Input.GetMouseButtonDown(0))
         {
-            var crook = heldItem.GetComponent<ShepherdsCrook>();
-            if (crook != null)
+            if (heldItem.TryGetComponent(out ShepherdsCrook crook))
             {
                 crook.Use();
             }
-            else
+            else if (heldItem.TryGetComponent(out JugBHVR arcItem))
             {
-                var arcItem = heldItem.GetComponent<JugBHVR>();
-                if (arcItem != null)
-                {
-                    arcItem.Throw(Camera.main.transform);
-                    heldItem = null;
-                }
-                else
-                {
-                    var item = heldItem.GetComponent<ZeusBoltItem>();
-                    if (item != null)
-                    {
-                        item.Throw(Camera.main.transform.forward);
-                        heldItem = null;
-                    }
-                }
+                arcItem.Throw(Camera.main.transform);
+                heldItem = null;
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
+            }
+            else if (heldItem.TryGetComponent(out ZeusBoltItem bolt))
+            {
+                bolt.Throw(Camera.main.transform.forward);
+                heldItem = null;
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
             }
         }
-
     }
 
     void TryPickupItem()
@@ -55,55 +55,59 @@ public class ItemPickup : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, pickupRange, interactableLayer))
         {
             Debug.Log($"Hit item: {hit.collider.name}");
-
             GameObject target = hit.collider.gameObject;
 
-            if (target.TryGetComponent(out ZeusBoltItem item))
+            if (target.TryGetComponent(out ZeusBoltItem bolt))
             {
                 heldItem = target;
-                item.Pickup(handTransform);
+                bolt.Pickup(handTransform);
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Bolt);
+                Debug.Log("Picked up BOLT");
             }
             else if (target.TryGetComponent(out ShepherdsCrook crook))
             {
                 heldItem = target;
                 crook.Pickup(handTransform);
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Crook);
+                Debug.Log("Picked up CROOK");
             }
-            else if (target.TryGetComponent(out JugBHVR arcItem))
+            else if (target.TryGetComponent(out JugBHVR jug))
             {
                 heldItem = target;
-                arcItem.Pickup(handTransform);
+                jug.Pickup(handTransform);
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Jug);
+                Debug.Log("Picked up JUG");
             }
             else
             {
-                Debug.Log("Hit something interactable-layered but it has no pickup logic.");
+                Debug.Log("Interactable hit, but no known item script.");
             }
         }
         else
         {
-            Debug.Log("No interactable item hit.");
+            Debug.Log("No interactable object hit.");
         }
     }
-
 
     void DropItem()
     {
         if (heldItem == null) return;
 
-        if (heldItem.TryGetComponent(out ZeusBoltItem item))
+        if (heldItem.TryGetComponent(out ZeusBoltItem bolt))
         {
-            item.Drop();
+            bolt.Drop();
         }
         else if (heldItem.TryGetComponent(out ShepherdsCrook crook))
         {
             crook.Drop();
         }
-        else if (heldItem.TryGetComponent(out JugBHVR arcItem))
+        else if (heldItem.TryGetComponent(out JugBHVR jug))
         {
-            arcItem.Drop();
+            jug.Drop();
         }
 
         Debug.Log($"Dropped: {heldItem.name}");
         heldItem = null;
+        uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
     }
-
 }

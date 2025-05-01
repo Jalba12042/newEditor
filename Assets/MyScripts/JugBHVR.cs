@@ -21,6 +21,8 @@ public class JugBHVR : MonoBehaviour
 
     private float movementThreshold = 0.1f;
 
+    private EquipmentUIController uiController;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -28,6 +30,9 @@ public class JugBHVR : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.loop = false;
+
+        // Get reference to UI controller
+        uiController = Object.FindFirstObjectByType<EquipmentUIController>();
     }
 
     void Update()
@@ -46,6 +51,7 @@ public class JugBHVR : MonoBehaviour
             lastHandPosition = handTransform.position;
         }
     }
+
     public void Pickup(Transform hand)
     {
         rb.isKinematic = true;
@@ -60,6 +66,8 @@ public class JugBHVR : MonoBehaviour
 
         if (pickupSound != null)
             AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+
+        uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Jug);
     }
 
     public void Drop()
@@ -68,6 +76,8 @@ public class JugBHVR : MonoBehaviour
         rb.isKinematic = false;
         isHeld = false;
         handTransform = null;
+
+        uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
     }
 
     public void Throw(Transform cameraTransform)
