@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ScrollShimmer 3
-  m_Shader: {fileID: 4800000, guid: 99cbfc23a61b18a4ea67f394ab8ce1bb, type: 3}
+  m_Name: Skybox_SunsetWithLowPolyClouds
+  m_Shader: {fileID: 4800000, guid: 850f29825bab18440a368be8f497c288, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -22,20 +22,17 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _ShimmerIntensity: 0.5
-    - _ShimmerSpeed: 1
-    - _ShimmerStrength: 1
-    - _ShimmerWidth: 0.3
+    - _BlendSharpness: 3
+    - _CloudDensity: 0
+    - _CloudSharpness: 2
+    - _SunPosition: 1
     m_Colors:
-    - _BaseColor: {r: 0.90188676, g: 0.77145463, b: 0.51560694, a: 1}
-    - _Color: {r: 0.5999999, g: 0.226813, b: 0.10754709, a: 1}
-    - _ShimmerColor: {r: 0.93207544, g: 0.9174616, b: 0.6454183, a: 1}
+    - _CloudColor: {r: 1, g: 0.9019608, b: 0.8509804, a: 1}
+    - _HorizonColor: {r: 1, g: 0.7647059, b: 0.54901963, a: 1}
+    - _MiddleColor: {r: 1, g: 0.47058824, b: 0.21960784, a: 1}
+    - _TopColor: {r: 0.12941177, g: 0.16862746, b: 0.36862746, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
