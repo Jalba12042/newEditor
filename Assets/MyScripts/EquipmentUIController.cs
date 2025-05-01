@@ -1,31 +1,35 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EquipmentUIController : MonoBehaviour
 {
-    [SerializeField] private Image equipmentIcon;
+    public GameObject jugImage;
+    public GameObject crookImage;
+    public GameObject boltImage;
 
-    [SerializeField] private Sprite defaultIcon;
-    [SerializeField] private Sprite crookIcon;
-    [SerializeField] private Sprite jugIcon;
-    [SerializeField] private Sprite boltIcon;
+    public enum ItemType { None, Jug, Crook, Bolt }
 
-    public void SetEquipmentIcon(string iconName)
+    public void SetEquipmentDisplay(ItemType item)
     {
-        switch (iconName)
+        jugImage.SetActive(false);
+        crookImage.SetActive(false);
+        boltImage.SetActive(false);
+
+        switch (item)
         {
-            case "Crook":
-                equipmentIcon.sprite = crookIcon;
+            case ItemType.Jug:
+                jugImage.SetActive(true);
                 break;
-            case "Jug":
-                equipmentIcon.sprite = jugIcon;
+            case ItemType.Crook:
+                crookImage.SetActive(true);
                 break;
-            case "Lightning":
-                equipmentIcon.sprite = boltIcon;
+            case ItemType.Bolt:
+                boltImage.SetActive(true);
                 break;
+            case ItemType.None:
             default:
-                equipmentIcon.sprite = defaultIcon;
+                // All images are already off
                 break;
         }
     }
 }
+
