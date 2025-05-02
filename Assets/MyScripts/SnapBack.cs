@@ -9,6 +9,8 @@ public class SnapBack : MonoBehaviour
 
     public float delay = 2f;
     public float snapSpeed = 5f;
+    public float positionThreshold = 0.05f;   // How close is “close enough”
+    public float rotationThreshold = 1f;      // Degrees difference
 
     private bool returning = false;
 
@@ -21,11 +23,17 @@ public class SnapBack : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Start snap-back routine when the object is moved
-        if (!returning)
+        if (!returning && !IsAtInitialTransform())
         {
             StartCoroutine(SnapBackRoutine());
         }
+    }
+
+    bool IsAtInitialTransform()
+    {
+        bool positionClose = Vector3.Distance(transform.position, initialPosition) < positionThreshold;
+        bool rotationClose = Quaternion.Angle(transform.rotation, initialRotation) < rotationThreshold;
+        return positionClose && rotationClose;
     }
 
     IEnumerator SnapBackRoutine()
@@ -36,13 +44,19 @@ public class SnapBack : MonoBehaviour
         rb.isKinematic = true;
 
         float t = 0f;
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
+
         while (t < 1f)
         {
             t += Time.deltaTime * snapSpeed;
-            transform.position = Vector3.Lerp(transform.position, initialPosition, t);
-            transform.rotation = Quaternion.Slerp(transform.rotation, initialRotation, t);
+            transform.position = Vector3.Lerp(startPos, initialPosition, t);
+            transform.rotation = Quaternion.Slerp(startRot, initialRotation, t);
             yield return null;
         }
+
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
 
         rb.isKinematic = false;
         returning = false;

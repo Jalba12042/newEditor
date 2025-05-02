@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AOEExplodeOnGround : MonoBehaviour
+public class JugPop : MonoBehaviour
 {
     public string groundTag = "Floor";         // Tag your ground with this
     public float explosionRadius = 5f;
@@ -34,5 +34,6 @@ public class AOEExplodeOnGround : MonoBehaviour
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, upwardModifier, ForceMode.Impulse);
             }
         }
+        hasExploded = false;
     }
 }
