@@ -32,17 +32,13 @@ public class ItemPickup : MonoBehaviour
             {
                 crook.Use();
             }
-            else if (heldItem.TryGetComponent(out JugBHVR arcItem))
-            {
-                arcItem.Throw(Camera.main.transform);
-                heldItem = null;
-                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
-            }
             else if (heldItem.TryGetComponent(out ZeusBoltItem bolt))
             {
-                bolt.Throw(Camera.main.transform.forward);
-                heldItem = null;
-                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
+                bolt.Use();
+            }
+            else if (heldItem.TryGetComponent(out JugBHVR jug))
+            {
+                jug.Use();
             }
         }
     }
@@ -54,34 +50,39 @@ public class ItemPickup : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, pickupRange, interactableLayer))
         {
-            Debug.Log($"Hit item: {hit.collider.name}");
             GameObject target = hit.collider.gameObject;
 
-            if (target.TryGetComponent(out ZeusBoltItem bolt))
+            // CROOK
+            if (target.TryGetComponent(out ShepherdsCrook crook))
             {
                 heldItem = target;
-                bolt.Pickup(handTransform);
-                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Bolt);
-                Debug.Log("Picked up BOLT");
-            }
-            else if (target.TryGetComponent(out ShepherdsCrook crook))
-            {
-                heldItem = target;
+                crook.playerCamera = Camera.main.transform;
                 crook.Pickup(handTransform);
                 uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Crook);
                 Debug.Log("Picked up CROOK");
             }
+            // BOLT
+            else if (target.TryGetComponent(out ZeusBoltItem bolt))
+            {
+                heldItem = target;
+                bolt.Pickup(handTransform);
+                bolt.SetCamera(Camera.main.transform); // Optional, if bolt needs camera in Use
+                uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Bolt);
+                Debug.Log("Picked up BOLT");
+            }
+            // JUG
             else if (target.TryGetComponent(out JugBHVR jug))
             {
                 heldItem = target;
+                jug.SetCamera(Camera.main.transform);
                 jug.Pickup(handTransform);
                 uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.Jug);
                 Debug.Log("Picked up JUG");
             }
-            else
-            {
-                Debug.Log("Interactable hit, but no known item script.");
-            }
+
+            // Disable outline when picked up
+            if (heldItem.TryGetComponent(out ItemOutlineController outlineCtrl))
+                outlineCtrl.SetHeldState(true);
         }
         else
         {
@@ -93,20 +94,23 @@ public class ItemPickup : MonoBehaviour
     {
         if (heldItem == null) return;
 
-        if (heldItem.TryGetComponent(out ZeusBoltItem bolt))
-        {
-            bolt.Drop();
-        }
-        else if (heldItem.TryGetComponent(out ShepherdsCrook crook))
+        if (heldItem.TryGetComponent(out ShepherdsCrook crook))
         {
             crook.Drop();
+        }
+        else if (heldItem.TryGetComponent(out ZeusBoltItem bolt))
+        {
+            bolt.Drop();
         }
         else if (heldItem.TryGetComponent(out JugBHVR jug))
         {
             jug.Drop();
         }
 
-        Debug.Log($"Dropped: {heldItem.name}");
+        // Re-enable outline when dropped
+        if (heldItem.TryGetComponent(out ItemOutlineController outlineCtrl))
+            outlineCtrl.SetHeldState(false);
+
         heldItem = null;
         uiController?.SetEquipmentDisplay(EquipmentUIController.ItemType.None);
     }
