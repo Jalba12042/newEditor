@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class JugBHVR : MonoBehaviour
@@ -22,6 +22,7 @@ public class JugBHVR : MonoBehaviour
     private float movementThreshold = 0.1f;
 
     private EquipmentUIController uiController;
+    private Transform playerCamera; // ✅ Add reference to camera
 
     void Awake()
     {
@@ -31,7 +32,6 @@ public class JugBHVR : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.loop = false;
 
-        // Get reference to UI controller
         uiController = Object.FindFirstObjectByType<EquipmentUIController>();
     }
 
@@ -93,10 +93,32 @@ public class JugBHVR : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
+{
+    if (!isHeld && impactSound != null)
     {
-        if (!isHeld && impactSound != null)
+        if (collision.gameObject.CompareTag("Ground"))
         {
             AudioSource.PlayClipAtPoint(impactSound, transform.position);
+        }
+    }
+}
+
+    // ✅ New camera setter for Use()
+    public void SetCamera(Transform cam)
+    {
+        playerCamera = cam;
+    }
+
+    // ✅ Add this Use() method
+    public void Use()
+    {
+        if (playerCamera != null)
+        {
+            Throw(playerCamera);
+        }
+        else
+        {
+            Debug.LogWarning("Camera not set for JugBHVR.");
         }
     }
 }
