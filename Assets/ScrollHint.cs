@@ -1,5 +1,6 @@
 using UnityEngine;
-using TMPro;  // Make sure you have TMP imported
+using UnityEngine.UI;  // Required for Image
+using TMPro;
 
 public class ScrollHint : MonoBehaviour
 {
@@ -10,31 +11,40 @@ public class ScrollHint : MonoBehaviour
     [Tooltip("Reference to the TextMeshProUGUI element on your Canvas")]
     public TextMeshProUGUI hintText;
 
-    // Called when a collider enters the trigger area
+    [Tooltip("Optional: Image to display behind the text (e.g., scroll graphic)")]
+    public Image scrollBackground;
+
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))  // Make sure the player has the "Player" tag
+        if (other.CompareTag("Player"))
         {
-            if(hintText != null)
+            if (hintText != null)
             {
                 hintText.text = hintMessage;
-                hintText.gameObject.SetActive(true);  // Show the text element
+                hintText.gameObject.SetActive(true);
+            }
+
+            if (scrollBackground != null)
+            {
+                scrollBackground.gameObject.SetActive(true);
             }
         }
     }
 
-    // Called when a collider exits the trigger area
     void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            if(hintText != null)
+            if (hintText != null)
             {
                 hintText.text = "";
-                hintText.gameObject.SetActive(false);  // Hide the text element
+                hintText.gameObject.SetActive(false);
+            }
+
+            if (scrollBackground != null)
+            {
+                scrollBackground.gameObject.SetActive(false);
             }
         }
     }
 }
-
-
